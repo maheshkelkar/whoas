@@ -1,0 +1,80 @@
+plugins {
+    id 'com.jfrog.bintray' version '1.0'
+    id 'org.asciidoctor.gradle.asciidoctor' version '1.5.1'
+    id 'com.github.johnrengelman.shadow' version '1.2.0'
+}
+
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+
+
+group = 'com.github.lookout'
+version = '0.1.0'
+description = 'A server-side webhook publishing library'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.glassfish.jersey.core:jersey-client:2.+'
+}
+
+test {
+    testLogging {
+        /* we want more test failure information, see:
+         *  <http://mrhaki.blogspot.com/2013/05/gradle-goodness-show-more-information.html>
+         */
+        exceptionFormat = 'full'
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// DOCUMENTATION TASKS
+////////////////////////////////////////////////////////////////////////////////
+asciidoctor {
+    sourceDir 'src/asciidoc'
+    outputDir 'docs'
+    attributes 'toc': 'right',
+                'source-highlighter': 'coderay',
+                'toc-title': 'Table of Contents'
+    shouldRunAfter test
+}
+check.dependsOn asciidoctor
+
+groovydoc {
+    destinationDir file('docs/html5/groovydoc')
+    shouldRunAfter test
+}
+check.dependsOn groovydoc
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// PUBLISHING TASKS
+////////////////////////////////////////////////////////////////////////////////
+bintray {
+    user = project.bintrayUser
+    key = project.bintrayKey
+    publish = true
+    dryRun = false
+    configurations = ['archives']
+
+    pkg {
+        userOrg = 'lookout'
+        repo = 'systems'
+        name = 'whoas'
+        labels = []
+
+        version {
+            name = project.version
+            vcsTag = "v${project.version}"
+            desc = project.description
+        }
+    }
+}
+bintrayUpload.dependsOn assemble
+////////////////////////////////////////////////////////////////////////////////
+
