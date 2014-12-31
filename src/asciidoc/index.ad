@@ -16,6 +16,7 @@ In order to accomplish this, Whoas aims to support two different usecases:
  * link:https://github.com/lookout/whoas/issues[Issue Tracker]
  * link:https://travis-ci.org/lookout/whoas[Builds]
  * link:publisher.html[Whoas Publisher details] on how Whoas performs webhook requests
+ * link:https://bintray.com/lookout/systems/whoas[Artifacts on Bintray]
 
 
 == Embedded
