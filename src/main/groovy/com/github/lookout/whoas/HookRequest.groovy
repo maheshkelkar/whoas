@@ -10,7 +10,7 @@ class HookRequest {
     private DateTime deliverAfter
 
 
-    /* Constructor for Jackson */
+    /** Constructor for Jackson */
     HookRequest() { }
 
     /**

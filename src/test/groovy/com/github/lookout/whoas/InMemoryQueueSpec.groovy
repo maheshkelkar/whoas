@@ -12,16 +12,89 @@ class InMemoryQueueSpec extends Specification {
         expect:
         queue.size == 0
     }
+
+    def "pop()ing without a closure should throw"() {
+        given:
+        InMemoryQueue q = new InMemoryQueue()
+
+        when:
+        q.pop()
+
+        then:
+        thrown Exception
+    }
+
+    def "push() should put onto the internal queue"() {
+        given:
+        InMemoryQueue queue = new InMemoryQueue()
+
+        when:
+        queue.push(new HookRequest())
+
+        then:
+        queue.size == 1
+    }
 }
 
 
 class InMemoryQueueWithGivenQueueSpec extends Specification {
-    def "getSize() should return 0 by default"() {
+
+    protected ArrayBlockingQueue internal
+    protected InMemoryQueue queue
+
+    def setup() {
+        internal = new ArrayBlockingQueue(1)
+        queue = new InMemoryQueue(internal)
+    }
+
+    def "getSize() should return the size of the intenral queue"() {
+        expect:
+        queue.size == internal.size()
+    }
+}
+
+class InMemoryQueueSpecWithMessage extends InMemoryQueueWithGivenQueueSpec {
+
+    private HookRequest request
+
+    def setup() {
+        request = new HookRequest()
+        /* Throw our req on the internal queue */
+        internal.put(request)
+    }
+
+    def "pop() should call the closure"() {
         given:
-        ArrayBlockingQueue internal = new ArrayBlockingQueue(1)
-        InMemoryQueue queue = new InMemoryQueue(internal)
+        Boolean executedClosure = false
+        Boolean receivedMessage = false
+
+        when:
+        queue.pop {
+            executedClosure = true
+            receivedMessage = (it == request)
+        }
+
+        then:
+        executedClosure
+        receivedMessage
+    }
+
+    def "pop() should requeue on exceptions"() {
+        setup:
+        queue.pop {
+            throw new Exception("Spock'd!")
+        }
 
         expect:
-        queue.size == 0
+        queue.size == 1
+    }
+
+    def "push()ing more than the internal queue can handle should return false"() {
+        setup:
+        queue.push(request)
+
+        expect:
+        queue.size == 1
+        queue.push(request) == false
     }
 }

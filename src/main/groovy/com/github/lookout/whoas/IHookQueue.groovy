@@ -22,5 +22,5 @@ interface IHookQueue {
     /**
      *
      */
-    Boolean enqueue(HookRequest request)
+    Boolean push(HookRequest request)
 }
