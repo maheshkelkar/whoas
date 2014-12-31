@@ -107,6 +107,10 @@ if (location.href.indexOf('is-external=true') == -1) {
 
 <dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookQueue.html" title="Class in com.github.lookout.whoas">AbstractHookQueue</a></span> - Class in <a href="./com/github/lookout/whoas/package-summary.html">com.github.lookout.whoas</a>
 </dt><dd><div class="block">Interface defining how 'HookQueue' providers should behave</div></dd>
+<dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookRunner.html" title="Class in com.github.lookout.whoas">AbstractHookRunner</a></span> - Class in <a href="./com/github/lookout/whoas/package-summary.html">com.github.lookout.whoas</a>
+</dt><dd><div class="block"></div></dd>
+<dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookRunner.html#AbstractHookRunner(com.github.lookout.whoas.AbstractHookQueue, com.github.lookout.whoas.Publisher)" title="Constructor in AbstractHookRunner">AbstractHookRunner(AbstractHookQueue, Publisher)</a></span> - Constructor in <a href="com/github/lookout/whoas/AbstractHookRunner.html">AbstractHookRunner</a>
+</dt><dd> <div class="block"></div></dd>
 </dl>
 
     
@@ -156,6 +160,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="com/github/lookout/whoas/HookRequest.html#getPostData()" title="Method in HookRequest">getPostData()</a></span> - Method in <a href="com/github/lookout/whoas/HookRequest.html">HookRequest</a>
 </dt><dd> <div class="block"></div></dd>
+<dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookRunner.html#getPublisher()" title="Method in AbstractHookRunner">getPublisher()</a></span> - Method in <a href="com/github/lookout/whoas/AbstractHookRunner.html">AbstractHookRunner</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="com/github/lookout/whoas/HookRequest.html#getRetries()" title="Method in HookRequest">getRetries()</a></span> - Method in <a href="com/github/lookout/whoas/HookRequest.html">HookRequest</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookQueue.html#getSize()" title="Method in AbstractHookQueue">getSize()</a></span> - Method in <a href="com/github/lookout/whoas/AbstractHookQueue.html">AbstractHookQueue</a>
@@ -202,6 +208,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <h2 class="title">K</h2>
 <dl>
 
+<dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookRunner.html#keepGoing" title="Field in AbstractHookRunner">keepGoing</a></span> - Field in <a href="com/github/lookout/whoas/AbstractHookRunner.html">AbstractHookRunner</a>
+</dt><dd> <div class="block"></div></dd>
 </dl>
 
     
@@ -248,6 +256,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="com/github/lookout/whoas/Publisher.html" title="Class in com.github.lookout.whoas">Publisher</a></span> - Class in <a href="./com/github/lookout/whoas/package-summary.html">com.github.lookout.whoas</a>
 </dt><dd><div class="block">Publisher is the class responsible for implementing the *actual* HTTP
  request logic for Whoas</div></dd>
+<dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookRunner.html#publisher" title="Field in AbstractHookRunner">publisher</a></span> - Field in <a href="com/github/lookout/whoas/AbstractHookRunner.html">AbstractHookRunner</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="com/github/lookout/whoas/Publisher.html#Publisher()" title="Constructor in Publisher">Publisher()</a></span> - Constructor in <a href="com/github/lookout/whoas/Publisher.html">Publisher</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookQueue.html#push(com.github.lookout.whoas.HookRequest)" title="Method in AbstractHookQueue">push(HookRequest)</a></span> - Method in <a href="com/github/lookout/whoas/AbstractHookQueue.html">AbstractHookQueue</a>
@@ -261,6 +271,8 @@ if (location.href.indexOf('is-external=true') == -1) {
 <h2 class="title">Q</h2>
 <dl>
 
+<dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookRunner.html#queue" title="Field in AbstractHookRunner">queue</a></span> - Field in <a href="com/github/lookout/whoas/AbstractHookRunner.html">AbstractHookRunner</a>
+</dt><dd> <div class="block"></div></dd>
 </dl>
 
     
@@ -268,6 +280,10 @@ if (location.href.indexOf('is-external=true') == -1) {
 <h2 class="title">R</h2>
 <dl>
 
+<dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookRunner.html#run()" title="Method in AbstractHookRunner">run()</a></span> - Method in <a href="com/github/lookout/whoas/AbstractHookRunner.html">AbstractHookRunner</a>
+</dt><dd> <div class="block">Block forever and run the runner's runloop.</div></dd>
+<dt><span class="strong"><a href="com/github/lookout/whoas/SequentialHookRunner.html#run()" title="Method in SequentialHookRunner">run()</a></span> - Method in <a href="com/github/lookout/whoas/SequentialHookRunner.html">SequentialHookRunner</a>
+</dt><dd> <div class="block">Execute an infinitely blocking single-threaded runloop</div></dd>
 </dl>
 
     
@@ -275,10 +291,15 @@ if (location.href.indexOf('is-external=true') == -1) {
 <h2 class="title">S</h2>
 <dl>
 
+<dt><span class="strong"><a href="com/github/lookout/whoas/SequentialHookRunner.html" title="Class in com.github.lookout.whoas">SequentialHookRunner</a></span> - Class in <a href="./com/github/lookout/whoas/package-summary.html">com.github.lookout.whoas</a>
+</dt><dd><div class="block">The SequentialHookRunner is will dequeue HookRequest items from the
+ configured AbstractHookQueue and publish those webhooks sequentially.</div></dd>
 <dt><span class="strong"><a href="com/github/lookout/whoas/HookRequest.html#setRetries(java.lang.Long)" title="Method in HookRequest">setRetries(Long)</a></span> - Method in <a href="com/github/lookout/whoas/HookRequest.html">HookRequest</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="com/github/lookout/whoas/Publisher.html#shouldRetry(javax.ws.rs.core.Response)" title="Method in Publisher">shouldRetry(Response)</a></span> - Method in <a href="com/github/lookout/whoas/Publisher.html">Publisher</a>
 </dt><dd> <div class="block">Determine whether this response meets our criteria for retry</div></dd>
+<dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookRunner.html#stop()" title="Method in AbstractHookRunner">stop()</a></span> - Method in <a href="com/github/lookout/whoas/AbstractHookRunner.html">AbstractHookRunner</a>
+</dt><dd> <div class="block">Tell the runloop to stop</div></dd>
 </dl>
 
     
