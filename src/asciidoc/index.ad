@@ -1,0 +1,16 @@
+= Whoas
+
+This project intends to be a library to help implement the service-side of
+link:https://en.wikipedia.org/wiki/Webhook[Webhooks]. Allowing services to
+implement reliable webhook-based notifications. Unlike many libraries out there
+which are "webhook listeners" or "webhook receivers," Whoas is meant to provide
+the *server-side* component, i.e. a "webhook publisher."
+
+In order to accomplish this, Whoas aims to support two different usecases:
+<<Embeded>> and <<Standalone>>.
+
+
+== Embedded
+
+
+== Standalone
