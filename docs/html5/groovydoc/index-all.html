@@ -114,6 +114,9 @@ if (location.href.indexOf('is-external=true') == -1) {
 <h2 class="title">B</h2>
 <dl>
 
+<dt><span class="strong"><a href="com/github/lookout/whoas/Publisher.html#backoffSleep(java.lang.Long)" title="Method in Publisher">backoffSleep(Long)</a></span> - Method in <a href="com/github/lookout/whoas/Publisher.html">Publisher</a>
+</dt><dd> <div class="block">Sleep the current thread the appropriate amount of time for the
+ attemptNumber</div></dd>
 </dl>
 
     
@@ -239,6 +242,14 @@ if (location.href.indexOf('is-external=true') == -1) {
 <dt><span class="strong"><a href="com/github/lookout/whoas/InMemoryQueue.html#pop(groovy.lang.Closure)" title="Method in InMemoryQueue">pop(Closure)</a></span> - Method in <a href="com/github/lookout/whoas/InMemoryQueue.html">InMemoryQueue</a>
 </dt><dd> <div class="block">Performs a blocking pop on the queue and invokes the closure with the
  item popped from the queue</div></dd>
+<dt><span class="strong"><a href="com/github/lookout/whoas/Publisher.html#publish(com.github.lookout.whoas.HookRequest)" title="Method in Publisher">publish(HookRequest)</a></span> - Method in <a href="com/github/lookout/whoas/Publisher.html">Publisher</a>
+</dt><dd> <div class="block">Publish the request using the appropriate backoff and retry logic
+ defined in the Whoas documentation</div></dd>
+<dt><span class="strong"><a href="com/github/lookout/whoas/Publisher.html" title="Class in com.github.lookout.whoas">Publisher</a></span> - Class in <a href="./com/github/lookout/whoas/package-summary.html">com.github.lookout.whoas</a>
+</dt><dd><div class="block">Publisher is the class responsible for implementing the *actual* HTTP
+ request logic for Whoas</div></dd>
+<dt><span class="strong"><a href="com/github/lookout/whoas/Publisher.html#Publisher()" title="Constructor in Publisher">Publisher()</a></span> - Constructor in <a href="com/github/lookout/whoas/Publisher.html">Publisher</a>
+</dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="com/github/lookout/whoas/AbstractHookQueue.html#push(com.github.lookout.whoas.HookRequest)" title="Method in AbstractHookQueue">push(HookRequest)</a></span> - Method in <a href="com/github/lookout/whoas/AbstractHookQueue.html">AbstractHookQueue</a>
 </dt><dd> <div class="block"></div></dd>
 <dt><span class="strong"><a href="com/github/lookout/whoas/InMemoryQueue.html#push(com.github.lookout.whoas.HookRequest)" title="Method in InMemoryQueue">push(HookRequest)</a></span> - Method in <a href="com/github/lookout/whoas/InMemoryQueue.html">InMemoryQueue</a>
@@ -264,6 +275,10 @@ if (location.href.indexOf('is-external=true') == -1) {
 <h2 class="title">S</h2>
 <dl>
 
+<dt><span class="strong"><a href="com/github/lookout/whoas/HookRequest.html#setRetries(java.lang.Long)" title="Method in HookRequest">setRetries(Long)</a></span> - Method in <a href="com/github/lookout/whoas/HookRequest.html">HookRequest</a>
+</dt><dd> <div class="block"></div></dd>
+<dt><span class="strong"><a href="com/github/lookout/whoas/Publisher.html#shouldRetry(javax.ws.rs.core.Response)" title="Method in Publisher">shouldRetry(Response)</a></span> - Method in <a href="com/github/lookout/whoas/Publisher.html">Publisher</a>
+</dt><dd> <div class="block">Determine whether this response meets our criteria for retry</div></dd>
 </dl>
 
     

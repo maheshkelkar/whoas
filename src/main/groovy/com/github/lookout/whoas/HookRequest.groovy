@@ -28,6 +28,10 @@ class HookRequest {
         return this.retries
     }
 
+    void setRetries(Long newRetries) {
+        this.retries = newRetries
+    }
+
     @JsonProperty
     String getUrl() {
         return this.url
