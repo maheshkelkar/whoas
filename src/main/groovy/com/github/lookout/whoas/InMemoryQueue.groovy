@@ -6,7 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue
 /**
  * A simple in-memory queue that offers no persistence between process restarts
  */
-class InMemoryQueue implements AbstractHookQueue {
+class InMemoryQueue extends AbstractHookQueue {
     private Queue<HookRequest> internalQueue
 
     /**
