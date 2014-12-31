@@ -1,0 +1,29 @@
+= Whoas Publisher
+
+This document enumerates the behaviors of the Whoas Publisher implementation
+and should be useful for any server-side implementer who is on the receiving
+end of Whoas-driven webhooks.
+
+By default the publisher is expecting to send and receive only JSON data.
+
+== User Agent
+
+The Whoas Publisher code will identify itself with: `whoas-publisher/<version>`
+where the supplied `version` is the version of Whoas code performing the
+request
+
+== Retry Behavior
+
+* `2xx` response codes are considered successes and discarded
+* `3xx` response codes are followed no more than 3 levels
+* `400` response codes should be discarded
+* `420` response codes are retried per back-off logic
+* `5xx` response codes are retried per back-off logic
+
+
+=== Back-off logic
+
+* Exponential back-off from 500ms
+* No more than 5 attempts
+* Failures after 5 attempts are logged as errors and discarded
+

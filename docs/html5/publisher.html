@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.0">
-<title>Whoas</title>
+<title>Whoas Publisher</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -502,68 +502,86 @@ table.CodeRay td.code>pre{padding:0}
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>Whoas</h1>
+<h1>Whoas Publisher</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_embedded">Embedded</a></li>
-<li><a href="#_standalone">Standalone</a></li>
+<li><a href="#_user_agent">User Agent</a></li>
+<li><a href="#_retry_behavior">Retry Behavior</a>
+<ul class="sectlevel2">
+<li><a href="#_back_off_logic">Back-off logic</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<a class="image" href=""https://travis-ci.org/lookout/whoas"><img src="https://travis-ci.org/lookout/whoas.svg" alt="Build status"></a>
-</div>
+<div class="paragraph">
+<p>This document enumerates the behaviors of the Whoas Publisher implementation
+and should be useful for any server-side implementer who is on the receiving
+end of Whoas-driven webhooks.</p>
 </div>
 <div class="paragraph">
-<p>This project intends to be a library to help implement the service-side of
-<a href="https://en.wikipedia.org/wiki/Webhook">Webhooks</a>. Allowing services to
-implement reliable webhook-based notifications. Unlike many libraries out there
-which are "webhook listeners" or "webhook receivers," Whoas is meant to provide
-the <strong>server-side</strong> component, i.e. a "webhook publisher."</p>
+<p>By default the publisher is expecting to send and receive only JSON data.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_user_agent">User Agent</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>In order to accomplish this, Whoas aims to support two different usecases:
-<a href="#_embedded">Embedded</a> and <a href="#_standalone">Standalone</a>.</p>
+<p>The Whoas Publisher code will identify itself with: <code>whoas-publisher/&lt;version&gt;</code>
+where the supplied <code>version</code> is the version of Whoas code performing the
+request</p>
 </div>
-<div class="paragraph">
-<p><strong>Important Links:</strong></p>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_retry_behavior">Retry Behavior</h2>
+<div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/lookout/whoas/issues">Issue Tracker</a></p>
+<p><code>2xx</code> response codes are considered successes and discarded</p>
 </li>
 <li>
-<p><a href="https://travis-ci.org/lookout/whoas">Builds</a></p>
+<p><code>3xx</code> response codes are followed no more than 3 levels</p>
 </li>
 <li>
-<p><a href="publisher.html">Whoas Publisher details</a> on how Whoas performs webhook requests</p>
+<p><code>400</code> response codes should be discarded</p>
+</li>
+<li>
+<p><code>420</code> response codes are retried per back-off logic</p>
+</li>
+<li>
+<p><code>5xx</code> response codes are retried per back-off logic</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_back_off_logic">Back-off logic</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Exponential back-off from 500ms</p>
+</li>
+<li>
+<p>No more than 5 attempts</p>
+</li>
+<li>
+<p>Failures after 5 attempts are logged as errors and discarded</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_embedded">Embedded</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_standalone">Standalone</h2>
-<div class="sectionbody">
-
-</div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2014-12-30 22:13:36 PST
+Last updated 2014-12-30 22:15:54 PST
 </div>
 </div>
 </body>
