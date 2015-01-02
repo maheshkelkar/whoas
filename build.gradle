@@ -4,12 +4,13 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '1.2.0'
 }
 
+apply plugin: 'maven'
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
 
 
 group = 'com.github.lookout'
-version = '0.1.0'
+version = '0.1.1'
 description = 'A server-side webhook publishing library'
 
 sourceCompatibility = '1.6'
