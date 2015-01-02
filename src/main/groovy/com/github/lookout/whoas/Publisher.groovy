@@ -40,6 +40,8 @@ class Publisher {
         Invocation inv = buildInvocationFrom(request)
         try {
             response = inv.invoke()
+            /* LOG: response */
+            String responseBody = response.readEntity(String.class)
         }
         catch (ProcessingException exc) {
             /* LOG: warn on this exception */

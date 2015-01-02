@@ -10,7 +10,7 @@ apply plugin: 'eclipse'
 
 
 group = 'com.github.lookout'
-version = '0.1.1'
+version = '0.1.2'
 description = 'A server-side webhook publishing library'
 
 sourceCompatibility = '1.6'
