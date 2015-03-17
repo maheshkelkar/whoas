@@ -83,13 +83,6 @@ groovydoc {
     shouldRunAfter test
 }
 
-def withSources(String dependency) {
-    ['sources'].each {
-        def sourceDependency = dependencies.create("${dependency}:${it}")
-    }
-    return dependency
-}
-
 check.dependsOn groovydoc
 ////////////////////////////////////////////////////////////////////////////////
 
