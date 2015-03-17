@@ -44,7 +44,7 @@ dependencies {
             'dropwizard-core',
             'dropwizard-configuration',
     ].each {
-        compile withSources("io.dropwizard:${it}:0.8.0-rc1")
+        compile "io.dropwizard:${it}:0.8.0-rc1"
     }
 
 }

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- *  Class to create different types of queues and runners
+ *  This factory will allow clients of whoas to build
+ *  different queues like in memory, persistent etc and runners
+ *  like sequential.
  */
 public class WhoasFactory {
 
@@ -60,8 +62,14 @@ public class WhoasFactory {
     }
 
     /**
-     * Allocate and return the queue based on stored queue type
+     * Allocate and return the queue based on stored queue type.
      *
+     * If the queue cannot be created, then this throws
+     * IllegalAccessException - if the class or its nullary constructor is not accessible.
+     * InstantiationException - if this Class represents an abstract class, an interface,
+     *                          an array class, a primitive type, or void;
+     *                          or if the class has no nullary constructor;
+     *                          or if the instantiation fails for some other reason.
      * @return allocated queue
      */
     public AbstractHookQueue buildQueue() {
@@ -71,6 +79,12 @@ public class WhoasFactory {
     /**
      * Allocate and return runner based on stored runner type
      *
+     * If the runner cannot be created, then this throws
+     * IllegalAccessException - if the class or its nullary constructor is not accessible.
+     * InstantiationException - if this Class represents an abstract class, an interface,
+     *                          an array class, a primitive type, or void;
+     *                          or if the class has no nullary constructor;
+     *                          or if the instantiation fails for some other reason.
      * @param hookQueue queue to associate with allocated runner
      * @return
      */
