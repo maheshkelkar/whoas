@@ -27,10 +27,6 @@ repositories {
 ////////////////////////////////////////////////////////////////////////////////
 // DEPENDENCY MANAGEMENT
 ////////////////////////////////////////////////////////////////////////////////
-configurations {
-    localJavadocs
-}
-
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.9+'
     compile 'org.glassfish.jersey.core:jersey-client:2.6+'
@@ -47,7 +43,6 @@ dependencies {
     [
             'dropwizard-core',
             'dropwizard-configuration',
-            'dropwizard-hibernate',
     ].each {
         compile withSources("io.dropwizard:${it}:0.8.0-rc1")
     }
@@ -91,7 +86,6 @@ groovydoc {
 def withSources(String dependency) {
     ['sources'].each {
         def sourceDependency = dependencies.create("${dependency}:${it}")
-        configurations.localJavadocs.dependencies.add(sourceDependency)
     }
     return dependency
 }
