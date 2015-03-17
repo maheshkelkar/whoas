@@ -24,6 +24,13 @@ repositories {
     mavenCentral()
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// DEPENDENCY MANAGEMENT
+////////////////////////////////////////////////////////////////////////////////
+configurations {
+    localJavadocs
+}
+
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.9+'
     compile 'org.glassfish.jersey.core:jersey-client:2.6+'
@@ -36,6 +43,15 @@ dependencies {
 
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testCompile 'cglib:cglib-nodep:2.2.+'
+
+    [
+            'dropwizard-core',
+            'dropwizard-configuration',
+            'dropwizard-hibernate',
+    ].each {
+        compile withSources("io.dropwizard:${it}:0.8.0-rc1")
+    }
+
 }
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -71,6 +87,15 @@ groovydoc {
     destinationDir file('docs/html5/groovydoc')
     shouldRunAfter test
 }
+
+def withSources(String dependency) {
+    ['sources'].each {
+        def sourceDependency = dependencies.create("${dependency}:${it}")
+        configurations.localJavadocs.dependencies.add(sourceDependency)
+    }
+    return dependency
+}
+
 check.dependsOn groovydoc
 ////////////////////////////////////////////////////////////////////////////////
 

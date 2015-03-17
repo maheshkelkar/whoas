@@ -1,3 +1,5 @@
 build/
+.idea/
+whoas.iml
 *.sw*
 .gradle/
