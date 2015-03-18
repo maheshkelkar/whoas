@@ -28,7 +28,7 @@ repositories {
 // DEPENDENCY MANAGEMENT
 ////////////////////////////////////////////////////////////////////////////////
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.3.9+'
+    compile 'org.codehaus.groovy:groovy-all:2.4.0+'
     compile 'org.glassfish.jersey.core:jersey-client:2.6+'
 
     /* Needed for serializing requests to JSON and back */
