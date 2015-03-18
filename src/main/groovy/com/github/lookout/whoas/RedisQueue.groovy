@@ -4,18 +4,31 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import redis.clients.jedis.Jedis;
 
 /**
- * A simple in-memory queue that offers no persistence between process restarts
+ * A redis queue that offers distributed and persistent queue
  */
 class RedisQueue extends AbstractHookQueue {
     private final RedisClientFactory redisClientFactory
     private static nextId = 0
+    private String hostname
+    private Integer port
+
     /**
-     * Create the RedisQueue
+     * Create the RedisQueue with valid config
+     */
+    RedisQueue(WhoasQueueConfig queueConfig) {
+        redisClientFactory = RedisClientFactory.getInstance()
+        this.hostname = queueConfig.hostname
+        this.port = queueConfig.port
+    }
+
+    /**
+     * Default constructor
      */
     RedisQueue() {
         redisClientFactory = RedisClientFactory.getInstance()
+        this.hostname = "localhost"
+        this.port = 6379
     }
-
     /**
      * Return the number of elements in the queue
      */
@@ -43,7 +56,7 @@ class RedisQueue extends AbstractHookQueue {
     @Override
     void start() {
         super.start()
-        redisClientFactory.start()
+        redisClientFactory.start(this.hostname, this.port)
     }
 
     /**

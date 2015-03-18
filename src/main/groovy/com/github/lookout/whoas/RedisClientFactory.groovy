@@ -11,7 +11,7 @@ public class RedisClientFactory {
     public final static RedisClientFactory getInstance() {
         return instance;
     }
-    public void start() {
+    public void start(String hostname, Integer port) {
         /* Set JedisPoolConfig */
         JedisPoolConfig poolConfig = new JedisPoolConfig();
 
@@ -48,7 +48,7 @@ public class RedisClientFactory {
         poolConfig.setTimeBetweenEvictionRunsMillis(60000);
 
         /* Create the jedisPool */
-        pool = new JedisPool(poolConfig, "localhost", 6379);
+        pool = new JedisPool(poolConfig, hostname, port);
     }
     public void stop() {
         pool.destroy();

@@ -13,7 +13,10 @@ See the example below
 
 ----
 whoas:
-  queueType: "com.github.lookout.whoas.Queue"
+  queue:
+    type: "com.github.lookout.whoas.RedisQueue"
+    hostname: "localhost"
+    port: 6379
   runnerType: "com.github.lookout.whoas.SequentialHookRunner"
 ----
 
