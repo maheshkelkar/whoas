@@ -1,7 +1,7 @@
 package com.github.lookout.whoas
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotEmpty
 
 /**
  *  This factory will allow clients of whoas to build
@@ -11,30 +11,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class WhoasFactory {
 
     /**
-     *  Type of queue to create in whoas
-     *
-     *  Default queue in whoas is InMemoryQueue
+     *  Queue configuration
      */
     @JsonProperty
-    String queueType = "com.github.lookout.whoas.InMemoryQueue"
-
-    /**
-     * Get function for queue type in the factory
-     *
-     * @return queue type in the factory
-     */
-    public String getQueueType() {
-        return queueType
-    }
-
-    /**
-     * Set function for the queue type in the factory
-     *
-     * @param queueType type of queue to store
-     */
-    public void setQueueType(String queueType) {
-        this.queueType = queueType
-    }
+    WhoasQueueConfig queueConfig = new WhoasQueueConfig()
 
     /**
      * Type of runner to create in whoas.
@@ -45,38 +25,20 @@ public class WhoasFactory {
     String runnerType = "com.github.lookout.whoas.SequentialHookRunner"
 
     /**
-     * Get function for runner type in the factory
-     *
-     * @return runner type in the factory
-     */
-    public String getRunnerType() {
-        return runnerType
-    }
-
-    /**
-     * Set function for runner type in the factory
-     *
-     * @param runnerType type of the runner to store
-     * @return
-     */
-    public setRunnerType(String runnerType) {
-        this.runnerType = runnerType
-    }
-
-    /**
      * Allocate and return the queue based on stored queue type.
      *
      * If the queue cannot be created, then this throws
      * ClassNotFoundException - if the class is not found
      * IllegalAccessException - if the class or its nullary constructor is not accessible.
      * InstantiationException - if this Class represents an abstract class, an interface,
-     *                          an array class, a primitive type, or void;
-     *                          or if the class has no nullary constructor;
+     *                          an array class, a primitive type, or void
+     *                          or if the class has no nullary constructor
      *                          or if the instantiation fails for some other reason.
      * @return allocated queue
      */
     public AbstractHookQueue buildQueue() {
-        return Class.forName(this.queueType).newInstance()
+        return Class.forName(this.queueConfig.type).getConstructor(WhoasQueueConfig.class).
+                newInstance(queueConfig)
     }
 
     /**
@@ -86,8 +48,8 @@ public class WhoasFactory {
      * ClassNotFoundException - if the class is not found
      * IllegalAccessException - if the class or its nullary constructor is not accessible.
      * InstantiationException - if this Class represents an abstract class, an interface,
-     *                          an array class, a primitive type, or void;
-     *                          or if the class has no nullary constructor;
+     *                          an array class, a primitive type, or void
+     *                          or if the class has no nullary constructor
      *                          or if the instantiation fails for some other reason.
      * @param hookQueue queue to associate with allocated runner
      * @return

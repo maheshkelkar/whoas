@@ -9,5 +9,5 @@ import io.dropwizard.Configuration
  * @param < T > Configuration class that extends dropwizard configuration
  */
 public interface WhoasConfiguration<T extends Configuration> {
-    WhoasFactory getWhoasFactory(T configuration);
+    WhoasFactory getWhoasFactory(T configuration)
 }
