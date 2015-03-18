@@ -7,9 +7,6 @@ import org.joda.time.DateTime
 class HookRequest {
 
     @JsonProperty
-    private Long id
-
-    @JsonProperty
     private Long retries
 
     @JsonProperty

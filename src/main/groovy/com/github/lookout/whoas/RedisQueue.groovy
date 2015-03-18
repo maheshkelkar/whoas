@@ -1,34 +1,35 @@
 package com.github.lookout.whoas
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Jedis
+import redis.clients.jedis.JedisPool
+import redis.clients.jedis.JedisPoolConfig
+
 
 /**
  * A redis queue that offers distributed and persistent queue
  */
 class RedisQueue extends AbstractHookQueue {
-    private final RedisClientFactory redisClientFactory
-    private static nextId = 0
-    private String hostname
-    private Integer port
+    private WhoasQueueConfig queueConfig
+    private JedisPool pool = null
+    private static Integer maxActiveConnections = 10
+    private static Integer maxIdleConnections = 5
+    private static Integer minIdleConnections = 1
 
     /**
      * Create the RedisQueue with valid config
      */
     RedisQueue(WhoasQueueConfig queueConfig) {
-        redisClientFactory = RedisClientFactory.getInstance()
-        this.hostname = queueConfig.hostname
-        this.port = queueConfig.port
+        this.queueConfig = queueConfig
     }
 
     /**
      * Default constructor
      */
     RedisQueue() {
-        redisClientFactory = RedisClientFactory.getInstance()
-        this.hostname = "localhost"
-        this.port = 6379
+        queueConfig = new WhoasQueueConfig()
     }
+
     /**
      * Return the number of elements in the queue
      */
@@ -36,36 +37,56 @@ class RedisQueue extends AbstractHookQueue {
         if (!this.started) {
             throw new Exception("Queue must be started before this operation is invoked")
         }
-        Jedis redisclient = null
-        Long queueSize = 0
-        try {
-            redisclient = redisClientFactory.getJedis()
-            queueSize = redisclient.llen("queue")
-        } catch (all) {
-        } finally {
-            if (redisclient != null) {
-                redisClientFactory.returnJedis(redisclient)
-            }
+        return withRedis() { Jedis redisClient ->
+            return redisClient.llen(this.queueConfig.key)
         }
-        return queueSize
     }
 
     /**
-     * Setup the Redis client factory
+     * Setup the Redis client
      */
     @Override
     void start() {
         super.start()
-        redisClientFactory.start(this.hostname, this.port)
+
+        /**
+         * Setup jedis pool
+         *
+         * A single jedis instance is NOT thread-safe. JedisPool maintains a thread-safe
+         * pool of network connections. The pool will allow us to maintain a pool of
+         * multiple jedis instances and use them reliably and efficiently across different
+         * threads
+         */
+        JedisPoolConfig poolConfig = new JedisPoolConfig()
+        poolConfig.setMaxTotal(maxActiveConnections)
+        poolConfig.setTestOnBorrow(true)
+        poolConfig.setTestOnReturn(true)
+        poolConfig.setMaxIdle(maxIdleConnections)
+        poolConfig.setMinIdle(minIdleConnections)
+        poolConfig.setTestWhileIdle(true)
+
+        /* Create the pool */
+        pool = new JedisPool(poolConfig, this.queueConfig.hostname, this.queueConfig.port)
     }
 
     /**
-     * Stop the Redis client factory
+     * Stop the Redis client
      */
     @Override
     void stop() {
         super.stop()
-        redisClientFactory.stop()
+        pool.destroy()
+        pool = null
+    }
+
+    Object withRedis(Closure closure) {
+        Jedis redisClient = pool.resource
+        try {
+            return closure.call(redisClient)
+        }
+        finally {
+            redisClient.close()
+        }
     }
 
     /**
@@ -84,26 +105,24 @@ class RedisQueue extends AbstractHookQueue {
             throw new Exception("Queue must be started before this operation is invoked")
         }
 
-        List<String> messages = null
-        Jedis redisclient = null
-        try {
-            redisclient = redisClientFactory.getJedis()
-            messages = redisclient.blpop(0, "queue");
+        withRedis() { Jedis redisClient ->
 
-            /* Decode message */
+            /**
+             * The blpop returns list of strings (key and value)
+             */
+            List<String> messages = redisClient.blpop(0, this.queueConfig.key)
+
+            /* If valid, decode message */
             if (messages) {
                 ObjectMapper mapper = new ObjectMapper()
                 HookRequest request = mapper.readValue(messages.get(1), HookRequest.class)
-                action.call(request)
-            }
-        } catch (all) {
-            /* Put this back on the front of the queue */
-            if (messages) {
-                redisclient.lpush("queue", messages.get(1))
-            }
-        } finally {
-            if (redisclient != null) {
-                redisClientFactory.returnJedis(redisclient)
+                try {
+                    action.call(request)
+                } catch (Exception ex) {
+                    /* Put this back on the front of the queue */
+                    redisClient.lpush(this.queueConfig.key, messages.get(1))
+                    throw ex
+                }
             }
         }
     }
@@ -119,20 +138,10 @@ class RedisQueue extends AbstractHookQueue {
             throw new Exception("Queue must be started before this operation is invoked")
         }
 
-        request.id = ++nextId
         ObjectMapper mapper = new ObjectMapper()
         String jsonPayload = mapper.writeValueAsString(request)
-        Jedis redisclient = null
-        Integer ret = 0
-        try {
-            redisclient = redisClientFactory.getJedis()
-            ret = redisclient.rpush("queue", jsonPayload)
-        } catch (Exception e) {
-        } finally {
-            if (redisclient != null) {
-                redisClientFactory.returnJedis(redisclient)
-            }
+        return withRedis() { Jedis redisClient ->
+            return redisClient.rpush(this.queueConfig.key, jsonPayload) != 0
         }
-        return ret == 1;
     }
 }

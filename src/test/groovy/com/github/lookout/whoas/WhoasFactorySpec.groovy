@@ -72,8 +72,9 @@ class WhoasFactorySpec extends Specification {
 
         expect:
         redisQueue instanceof RedisQueue
-        redisQueue.hostname == "localhost"
-        redisQueue.port == 6379
+        redisQueue.queueConfig.hostname == "localhost"
+        redisQueue.queueConfig.port == 6379
+        redisQueue.queueConfig.key == "queue"
     }
 
     def "Create RedisQueue with non-default hostname and port config"() {
@@ -82,11 +83,11 @@ class WhoasFactorySpec extends Specification {
         whoasFactory.queueConfig.type = "com.github.lookout.whoas.RedisQueue"
         whoasFactory.queueConfig.hostname = "redis.lookout.com"
         whoasFactory.queueConfig.port = 1234
+        whoasFactory.queueConfig.key = "foo"
         RedisQueue redisQueue = whoasFactory.buildQueue()
 
         expect:
         redisQueue instanceof RedisQueue
-        redisQueue.hostname == whoasFactory.queueConfig.hostname
-        redisQueue.port == whoasFactory.queueConfig.port
+        redisQueue.queueConfig == whoasFactory.queueConfig
     }
 }

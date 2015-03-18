@@ -37,7 +37,7 @@ dependencies {
     compile 'joda-time:joda-time:2.6+'
     /* redis client */
     compile 'redis.clients:jedis:2.6+'
-    compile 'com.fiftyonred:mock-jedis:0.4.0'
+    testCompile 'com.fiftyonred:mock-jedis:0.4.0'
 
     testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     testCompile 'cglib:cglib-nodep:2.2.+'

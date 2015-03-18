@@ -16,6 +16,14 @@ public class WhoasQueueConfig {
     String type = "com.github.lookout.whoas.InMemoryQueue"
 
     /**
+     *  key to idenitfy the distributed queue
+     *
+     *  Default key is "queue"
+     */
+    @JsonProperty
+    String key = "queue"
+
+    /**
      *  Hostname of the distributed queue server
      *
      *  Default hostname is localhost

@@ -1,7 +1,7 @@
 package com.github.lookout.whoas
 
 import com.fiftyonred.mock_jedis.MockJedis
-import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Jedis
 import spock.lang.*
 
 
@@ -21,11 +21,11 @@ class RedisQueueSpec extends Specification {
     def "getSize() should return 0 by default"() {
         given:
         RedisQueue queue = new RedisQueue()
-        //Jedis redisClient = new MockJedis("test");
-        //queue.redisClientFactory.metaClass.getJedis = {redisClient}
+        Jedis redisClient = new MockJedis("test")
 
         when:
         queue.start()
+        queue.pool.metaClass.getResource = {redisClient}
 
         then:
         queue.getSize() == 0
@@ -67,12 +67,12 @@ class RedisQueueSpec extends Specification {
     def "push() should put onto the internal queue"() {
         given:
         RedisQueue queue = new RedisQueue()
-        Jedis redisClient = new MockJedis("test");
-        queue.redisClientFactory.metaClass.getJedis = {redisClient}
+        Jedis redisClient = new MockJedis("test")
         redisClient.metaClass.rpush = {String key, String payload -> redisClient.lpush(key, payload)}
 
         when:
         queue.start()
+        queue.pool.metaClass.getResource = {redisClient}
         queue.push(new HookRequest())
         queue.push(new HookRequest())
 
@@ -83,13 +83,13 @@ class RedisQueueSpec extends Specification {
     def "pop() after push should receive a request"() {
         given:
         RedisQueue queue = new RedisQueue()
-        Jedis redisClient = new MockJedis("test");
-        queue.redisClientFactory.metaClass.getJedis = {redisClient}
+        Jedis redisClient = new MockJedis("test")
         redisClient.metaClass.rpush = {String key, String payload -> redisClient.lpush(key, payload)}
         redisClient.metaClass.blpop = {Integer timeout, String key -> [key, redisClient.lpop(key)]}
 
         when:
         queue.start()
+        queue.pool.metaClass.getResource = {redisClient}
         HookRequest test = new HookRequest()
         queue.push(test)
 
@@ -102,49 +102,48 @@ class RedisQueueSpec extends Specification {
     def "push() on rpush exception should return false"() {
         given:
         RedisQueue queue = new RedisQueue()
-        Jedis redisClient = new MockJedis("test");
-        queue.redisClientFactory.metaClass.getJedis = {redisClient}
+        Jedis redisClient = new MockJedis("test")
         redisClient.metaClass.rpush = {String key, String payload -> throw new Exception("Test Exception")}
 
         when:
         queue.start()
+        queue.pool.metaClass.getResource = {redisClient}
+        queue.push(new HookRequest())
 
         then:
-        queue.push(new HookRequest()) == false
+        thrown Exception
     }
 
     def "pop() on blpop exception simple return, nothing to requeue "() {
         given:
         RedisQueue queue = new RedisQueue()
-        Jedis redisClient = new MockJedis("test");
-        queue.redisClientFactory.metaClass.getJedis = {redisClient}
+        Jedis redisClient = new MockJedis("test")
         redisClient.metaClass.blpop = {Integer timeout, String key -> throw new Exception("Test Exception")}
 
         when:
         queue.start()
+        queue.pool.metaClass.getResource = {redisClient}
         queue.pop() { }
 
         then:
-        queue.getSize() == 0
-
+        thrown Exception
     }
 
     def "pop() on exception while executing closure should requeue"() {
         given:
         RedisQueue queue = new RedisQueue()
-        Jedis redisClient = new MockJedis("test");
-        queue.redisClientFactory.metaClass.getJedis = {redisClient}
+        Jedis redisClient = new MockJedis("test")
         redisClient.metaClass.rpush = {String key, String payload -> redisClient.lpush(key, payload)}
         redisClient.metaClass.blpop = {Integer timeout, String key -> [key, redisClient.lpop(key)]}
 
-        redisClient.metaClass.blpop = {Integer timeout, String key -> }
-
         when:
         queue.start()
+        queue.pool.metaClass.getResource = {redisClient}
         queue.push(new HookRequest())
         queue.pop() { throw new Exception("Test Exception") }
 
         then:
+        thrown Exception
         queue.getSize() == 1
     }
 }
