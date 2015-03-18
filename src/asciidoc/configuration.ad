@@ -1,0 +1,14 @@
+Default behavior
+================
+If clients of whoas library don't have any whoas configuration, the whoas factory will create
+InMemoryQueue and SequentialHookRunner
+
+Library Configuration
+=====================
+
+The clients of whoas library can add "whoas" configuration to build queue and runner of their choice.
+See the example below
+
+whos:
+  queueType: "com.github.lookout.whoas.Queue"
+  runnerType: "com.github.lookout.whoas.SequentialHookRunner"

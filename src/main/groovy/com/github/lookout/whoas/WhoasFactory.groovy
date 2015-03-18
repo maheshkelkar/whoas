@@ -12,10 +12,11 @@ public class WhoasFactory {
 
     /**
      *  Type of queue to create in whoas
+     *
+     *  Default queue in whoas is InMemoryQueue
      */
     @JsonProperty
-    @NotEmpty
-    String queueType
+    String queueType = "com.github.lookout.whoas.InMemoryQueue"
 
     /**
      * Get function for queue type in the factory
@@ -36,11 +37,12 @@ public class WhoasFactory {
     }
 
     /**
-     * Type of runner to create in whoas
+     * Type of runner to create in whoas.
+     *
+     * Default runner in whoas is SequentialHookRunner
      */
     @JsonProperty
-    @NotEmpty
-    String runnerType
+    String runnerType = "com.github.lookout.whoas.SequentialHookRunner"
 
     /**
      * Get function for runner type in the factory
@@ -65,6 +67,7 @@ public class WhoasFactory {
      * Allocate and return the queue based on stored queue type.
      *
      * If the queue cannot be created, then this throws
+     * ClassNotFoundException - if the class is not found
      * IllegalAccessException - if the class or its nullary constructor is not accessible.
      * InstantiationException - if this Class represents an abstract class, an interface,
      *                          an array class, a primitive type, or void;
@@ -80,6 +83,7 @@ public class WhoasFactory {
      * Allocate and return runner based on stored runner type
      *
      * If the runner cannot be created, then this throws
+     * ClassNotFoundException - if the class is not found
      * IllegalAccessException - if the class or its nullary constructor is not accessible.
      * InstantiationException - if this Class represents an abstract class, an interface,
      *                          an array class, a primitive type, or void;
