@@ -1,0 +1,19 @@
+Default behavior
+----------------
+
+If clients of whoas library don't have any whoas configuration, the whoas factory will create
+InMemoryQueue that is a simple in memory FIFO with non blocking push and blocking pop operations and
+SequentialHookRunner that has run loop around queue pop and publishes the hook requests.
+
+Library Configuration
+---------------------
+
+The clients of whoas library can add "whoas" configuration to build queue and runner of their choice.
+See the example below
+
+----
+whoas:
+  queueType: "com.github.lookout.whoas.Queue"
+  runnerType: "com.github.lookout.whoas.SequentialHookRunner"
+----
+
