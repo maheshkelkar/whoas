@@ -11,30 +11,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class WhoasFactory {
 
     /**
-     *  Type of queue to create in whoas
-     *
-     *  Default queue in whoas is InMemoryQueue
+     *  Queue configuration
      */
     @JsonProperty
-    String queueType = "com.github.lookout.whoas.InMemoryQueue"
-
-    /**
-     * Get function for queue type in the factory
-     *
-     * @return queue type in the factory
-     */
-    public String getQueueType() {
-        return queueType
-    }
-
-    /**
-     * Set function for the queue type in the factory
-     *
-     * @param queueType type of queue to store
-     */
-    public void setQueueType(String queueType) {
-        this.queueType = queueType
-    }
+    WhoasQueueConfig queueConfig = new WhoasQueueConfig()
 
     /**
      * Type of runner to create in whoas.
@@ -43,25 +23,6 @@ public class WhoasFactory {
      */
     @JsonProperty
     String runnerType = "com.github.lookout.whoas.SequentialHookRunner"
-
-    /**
-     * Get function for runner type in the factory
-     *
-     * @return runner type in the factory
-     */
-    public String getRunnerType() {
-        return runnerType
-    }
-
-    /**
-     * Set function for runner type in the factory
-     *
-     * @param runnerType type of the runner to store
-     * @return
-     */
-    public setRunnerType(String runnerType) {
-        this.runnerType = runnerType
-    }
 
     /**
      * Allocate and return the queue based on stored queue type.
@@ -76,7 +37,8 @@ public class WhoasFactory {
      * @return allocated queue
      */
     public AbstractHookQueue buildQueue() {
-        return Class.forName(this.queueType).newInstance()
+        return Class.forName(this.queueConfig.type).getConstructor(WhoasQueueConfig.class).
+                newInstance(queueConfig)
     }
 
     /**

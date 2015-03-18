@@ -10,7 +10,14 @@ class InMemoryQueue extends AbstractHookQueue {
     private Queue<HookRequest> internalQueue
 
     /**
-     * Create the InMemoryQueue with it's own internal queueing implementation
+     * Create the InMemoryQueue from configuration
+     */
+    InMemoryQueue(WhoasQueueConfig queueConfig) {
+        this.internalQueue = new LinkedBlockingQueue<HookRequest>()
+    }
+
+    /**
+     * Default constructor
      */
     InMemoryQueue() {
         this.internalQueue = new LinkedBlockingQueue<HookRequest>()

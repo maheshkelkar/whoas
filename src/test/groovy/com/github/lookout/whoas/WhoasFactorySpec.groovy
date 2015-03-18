@@ -26,18 +26,17 @@ class WhoasFactorySpec extends Specification {
     def "given a queue class name, buildQueue should create specified queue"() {
         given:
         WhoasFactory whoasFactory = new WhoasFactory()
-        whoasFactory.setQueueType("com.github.lookout.whoas.InMemoryQueue")
+        whoasFactory.queueConfig.type = "com.github.lookout.whoas.InMemoryQueue"
         InMemoryQueue inMemoryQueue = whoasFactory.buildQueue()
 
         expect:
         inMemoryQueue instanceof InMemoryQueue
-
     }
 
     def "given a invalid class name, buildQueue should throw ClassNotFound exception"() {
         when:
         WhoasFactory whoasFactory = new WhoasFactory()
-        whoasFactory.setQueueType("com.github.lookout.InvalidQueue")
+        whoasFactory.queueConfig.type = "com.github.lookout.InvalidQueue"
         AbstractHookQueue abstractHookQueue =  whoasFactory.buildQueue()
 
         then:
@@ -47,7 +46,7 @@ class WhoasFactorySpec extends Specification {
     def "given a runner class name, buildQueue should create specified queue"() {
         given:
         WhoasFactory whoasFactory = new WhoasFactory()
-        whoasFactory.setRunnerType("com.github.lookout.whoas.SequentialHookRunner")
+        whoasFactory.runnerType = "com.github.lookout.whoas.SequentialHookRunner"
         SequentialHookRunner sequentialHookRunner = whoasFactory.buildRunner(whoasFactory.buildQueue())
 
         expect:
@@ -58,11 +57,36 @@ class WhoasFactorySpec extends Specification {
     def "given a invalid class name, buildRunner should throw ClassNotFound exception"() {
         when:
         WhoasFactory whoasFactory = new WhoasFactory()
-        whoasFactory.setRunnerType("com.github.lookout.whoas.Invalidunner")
+        whoasFactory.runnerType = "com.github.lookout.whoas.Invalidunner"
         AbstractHookRunner abstractHookRunner = whoasFactory.buildRunner(whoasFactory.buildQueue())
 
         then:
         thrown(ClassNotFoundException)
+    }
 
+    def "Create RedisQueue with default hostname and port config"() {
+        given:
+        WhoasFactory whoasFactory = new WhoasFactory()
+        whoasFactory.queueConfig.type = "com.github.lookout.whoas.RedisQueue"
+        RedisQueue redisQueue = whoasFactory.buildQueue()
+
+        expect:
+        redisQueue instanceof RedisQueue
+        redisQueue.hostname == "localhost"
+        redisQueue.port == 6379
+    }
+
+    def "Create RedisQueue with non-default hostname and port config"() {
+        given:
+        WhoasFactory whoasFactory = new WhoasFactory()
+        whoasFactory.queueConfig.type = "com.github.lookout.whoas.RedisQueue"
+        whoasFactory.queueConfig.hostname = "redis.lookout.com"
+        whoasFactory.queueConfig.port = 1234
+        RedisQueue redisQueue = whoasFactory.buildQueue()
+
+        expect:
+        redisQueue instanceof RedisQueue
+        redisQueue.hostname == whoasFactory.queueConfig.hostname
+        redisQueue.port == whoasFactory.queueConfig.port
     }
 }
