@@ -13,7 +13,7 @@ public class WhoasFactory {
     /**
      *  Queue configuration
      */
-    @JsonProperty
+    @JsonProperty(value = "queue")
     WhoasQueueConfig queueConfig = new WhoasQueueConfig()
 
     /**

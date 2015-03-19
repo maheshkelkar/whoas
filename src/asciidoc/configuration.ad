@@ -11,10 +11,18 @@ Library Configuration
 The clients of whoas library can add "whoas" configuration to build queue and runner of their choice.
 See the example below
 
+* queue: configure type and queue specific parameters
+** type: full classname for the queue class defined in whoas  (e.g. com.github.lookout.whoas.InMemoryQueue)
+** key: key of the list data type (currently applies to redis)
+** hostname: hostname of the distributed queue server (currently applies to redis)
+** port: port of the distributed queue server (currently applies to redis)
+* runnerType: full classname for the runner class defined in whoas
+
 ----
 whoas:
   queue:
     type: "com.github.lookout.whoas.RedisQueue"
+    key: "queue"
     hostname: "localhost"
     port: 6379
   runnerType: "com.github.lookout.whoas.SequentialHookRunner"
