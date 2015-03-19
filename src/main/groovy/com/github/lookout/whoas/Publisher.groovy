@@ -7,6 +7,7 @@ import javax.ws.rs.client.Invocation
 import javax.ws.rs.core.Response
 import javax.ws.rs.ProcessingException
 
+
 /**
  * Publisher is the class responsible for implementing the *actual* HTTP
  * request logic for Whoas
@@ -40,6 +41,7 @@ class Publisher {
         Invocation inv = buildInvocationFrom(request)
         try {
             response = inv.invoke()
+
             /* LOG: response */
             String responseBody = response.readEntity(String.class)
         }
@@ -66,6 +68,10 @@ class Publisher {
      * Determine whether this response meets our criteria for retry
      */
     Boolean shouldRetry(Response response) {
+        if (response == null) {
+            return true
+        }
+
         /* Enhance your calm and try again */
         if (response.status == 420) {
             return true

@@ -30,7 +30,6 @@ abstract class AbstractHookQueue {
      */
     abstract Long getSize()
 
-
     /**
      *
      */
