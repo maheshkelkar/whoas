@@ -46,8 +46,7 @@ class Publisher {
             String responseBody = response.readEntity(String.class)
         }
         catch (ProcessingException exc) {
-            logger.warn("\"POST\" to url: \"${request.url}\" " +
-                    "has failed with exception: " + exc.getMessage())
+            logger.warn("\"POST\" to url: \"${request.url}\" failed", exc)
             retryableExc = true
         }
 
@@ -62,7 +61,7 @@ class Publisher {
             return this.publish(request)
         }
 
-        logger.debug("\"POST\" to url: \"${request.url}\" succeeded, ${logger.name}, ${logger.debugEnabled}")
+        logger.debug("\"POST\" to url: \"${request.url}\" succeeded")
         return true
     }
 
